@@ -217,6 +217,118 @@ Automated system maintenance and optimization.
 ./system_maintenance.sh --update --cleanup --dry-run
 ```
 
+### 8. SSL Certificate Management Scripts (`ssl-certificates/`)
+
+#### `ssl_manager.sh`
+Comprehensive SSL certificate management with key, CSR generation, and validation.
+
+**Features:**
+- Private key generation (RSA, various key sizes)
+- Certificate Signing Request (CSR) creation
+- Self-signed certificate generation
+- Certificate Authority (CA) setup
+- Certificate signing with CA
+- Certificate validation and verification
+- Certificate information display
+- Expiration checking
+- SSL/TLS configuration testing
+- Certificate format conversion (PEM, DER, PKCS12)
+- Certificate bundle creation
+
+**Usage:**
+```bash
+./ssl_manager.sh [COMMAND] [OPTIONS]
+```
+
+**Examples:**
+```bash
+# Generate private key
+./ssl_manager.sh generate-key --domain example.com --key-size 4096
+
+# Generate CSR with SAN
+./ssl_manager.sh generate-csr --domain example.com --key-file example.com.key --san "www.example.com,api.example.com"
+
+# Generate self-signed certificate
+./ssl_manager.sh generate-cert --domain example.com --days 365
+
+# Validate certificate and key
+./ssl_manager.sh validate --cert-file example.com.crt --key-file example.com.key
+
+# Test remote SSL
+./ssl_manager.sh test-ssl --host example.com --port 443
+```
+
+#### `cert_monitor.sh`
+Monitors SSL certificates for expiration with comprehensive alerting.
+
+**Features:**
+- Local certificate file monitoring
+- Remote host certificate checking
+- Configurable warning and critical thresholds
+- Multiple output formats (text, JSON, CSV)
+- Email alerts for expiring certificates
+- Configuration file support
+- Detailed logging
+
+**Usage:**
+```bash
+./cert_monitor.sh [OPTIONS]
+```
+
+**Examples:**
+```bash
+# Check specific certificate file
+./cert_monitor.sh --check-file /etc/ssl/certs/example.com.crt --warn-days 60
+
+# Check remote host
+./cert_monitor.sh --check-host example.com --email admin@example.com
+
+# Generate JSON report
+./cert_monitor.sh --check-hosts --output-format json
+
+# Use configuration file
+./cert_monitor.sh --config /etc/ssl/cert_monitor.conf
+```
+
+#### `letsencrypt_manager.sh`
+Automates Let's Encrypt certificate management with multiple validation methods.
+
+**Features:**
+- Certificate obtaining with webroot, standalone, or DNS validation
+- Automatic certificate renewal
+- Multiple domain support (SAN certificates)
+- Web server integration (Nginx, Apache)
+- Staging environment support
+- Automatic renewal setup with cron
+- Certificate backup and restore
+- Hooks for custom actions
+
+**Usage:**
+```bash
+./letsencrypt_manager.sh [COMMAND] [OPTIONS]
+```
+
+**Examples:**
+```bash
+# Obtain certificate for single domain
+./letsencrypt_manager.sh obtain --domain example.com --email admin@example.com
+
+# Obtain certificate for multiple domains
+./letsencrypt_manager.sh obtain --domains "example.com,www.example.com,api.example.com" --email admin@example.com
+
+# Obtain using standalone mode
+./letsencrypt_manager.sh obtain --domain example.com --email admin@example.com --standalone
+
+# Renew all certificates
+./letsencrypt_manager.sh renew
+
+# Set up auto-renewal
+./letsencrypt_manager.sh auto-renew
+
+# Backup certificates
+./letsencrypt_manager.sh backup --backup-dir /backup/letsencrypt
+```
+
 ## Installation and Setup
 
 1. **Clone or download the scripts:**
